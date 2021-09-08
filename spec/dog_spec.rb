@@ -42,7 +42,7 @@ describe Dog do
 
   describe "#save" do
     it 'returns an instance of the dog class' do
-      dog = Dog.new(name: "Teddy", breed: "cockapoo") 
+      dog = Dog.new(name: "Teddy", breed: "cockapoo")
       dog.save
 
       expect(dog).to have_attributes(
@@ -54,7 +54,7 @@ describe Dog do
     end
 
     it 'saves an instance of the dog class to the database and then sets the given dogs `id` attribute' do
-      dog = Dog.new(name: "Teddy", breed: "cockapoo") 
+      dog = Dog.new(name: "Teddy", breed: "cockapoo")
       dog.save
 
       expect(DB[:conn].execute("SELECT * FROM dogs WHERE id = 1")).to eq([[1, "Teddy", "cockapoo"]])
@@ -71,9 +71,9 @@ describe Dog do
       dog = Dog.create(name: "Dave", breed: "poodle")
 
       expect(dog).to have_attributes(
-        class: Dog, 
+        class: Dog,
         id: 1,
-        name: "Dave", 
+        name: "Dave",
         breed: "poodle"
       )
     end
@@ -104,13 +104,13 @@ describe Dog do
       ])
     end
   end
-  
+
   describe '.find_by_name' do
     it 'returns an instance of dog that matches the name from the DB' do
       Dog.create(name: "Kevin", breed: "shepard")
       Dog.create(name: "Dave", breed: "poodle")
 
-      dog_from_db = Dog.find_by_name("Kevin") 
+      dog_from_db = Dog.find_by_name("Kevin")
 
       expect(dog_from_db).to have_attributes(
         class: Dog,
@@ -138,54 +138,54 @@ describe Dog do
   end
 
   # BONUS! uncomment the tests below for an extra challenge
-  # describe '.find_or_create_by' do
-  #   it 'creates an instance of a dog if it does not already exist' do
-  #     dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-  #     dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
+  describe '.find_or_create_by' do
+    it 'creates an instance of a dog if it does not already exist' do
+      dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
+      dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
-  #     expect(dog2.id).to eq(dog1.id)
-  #   end
+      expect(dog2.id).to eq(dog1.id)
+    end
 
-  #   it 'when two dogs have the same name and different breed, it returns the correct dog' do
-  #     dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-  #     Dog.create(name: 'teddy', breed: 'pug')
+    it 'when two dogs have the same name and different breed, it returns the correct dog' do
+      dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
+      Dog.create(name: 'teddy', breed: 'pug')
 
-  #     dog_from_db = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
+      dog_from_db = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
-  #     expect(dog_from_db.id).to eq(1)
-  #     expect(dog_from_db.id).to eq(dog1.id)
-  #   end
+      expect(dog_from_db.id).to eq(1)
+      expect(dog_from_db.id).to eq(dog1.id)
+    end
 
-  #   it 'when creating a new dog with the same name as persisted dogs, it returns the correct dog' do
-  #     Dog.create(name: 'teddy', breed: 'cockapoo')
-  #     Dog.create(name: 'teddy', breed: 'pug')
+    it 'when creating a new dog with the same name as persisted dogs, it returns the correct dog' do
+      Dog.create(name: 'teddy', breed: 'cockapoo')
+      Dog.create(name: 'teddy', breed: 'pug')
 
-  #     new_dog = Dog.find_or_create_by(name: 'teddy', breed: 'irish setter')
+      new_dog = Dog.find_or_create_by(name: 'teddy', breed: 'irish setter')
 
-  #     expect(new_dog.id).to eq(3)
-  #   end
-  # end
+      expect(new_dog.id).to eq(3)
+    end
+  end
 
-  # describe '#update' do
-  #   it 'updates the record associated with a given instance' do
-  #     teddy = Dog.create(name: "Teddy", breed: "cockapoo")
-  #     teddy.name = "Teddy Jr."
-  #     teddy.update
-  #     also_teddy = Dog.find_by_name("Teddy Jr.")
-  #     expect(also_teddy.id).to eq(teddy.id)
-  #   end
-  # end
+  describe '#update' do
+    it 'updates the record associated with a given instance' do
+      teddy = Dog.create(name: "Teddy", breed: "cockapoo")
+      teddy.name = "Teddy Jr."
+      teddy.update
+      also_teddy = Dog.find_by_name("Teddy Jr.")
+      expect(also_teddy.id).to eq(teddy.id)
+    end
+  end
 
-  # context 'when called on a record with an ID' do
-  #   describe '#save' do
-  #     it 'updates the record associated with a given instance' do
-  #       teddy = Dog.create(name: 'teddy', breed: 'cockapoo')
-  #       teddy.name = "Teddy Jr."
-  #       teddy.save
-  #       also_teddy = Dog.find_by_name("Teddy Jr.")
-  #       expect(also_teddy.id).to eq(teddy.id)
-  #     end
-  #   end
-  # end
+  context 'when called on a record with an ID' do
+    describe '#save' do
+      it 'updates the record associated with a given instance' do
+        teddy = Dog.create(name: 'teddy', breed: 'cockapoo')
+        teddy.name = "Teddy Jr."
+        teddy.save
+        also_teddy = Dog.find_by_name("Teddy Jr.")
+        expect(also_teddy.id).to eq(teddy.id)
+      end
+    end
+  end
 
 end
